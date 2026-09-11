@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cartões - Recall</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="voltar">← Voltar</a>
+      <h1 id="titulo">Cartões</h1>
+    </header>
+
+    <main>
+      <div class="form-cartao">
+        <input id="nova-frente" type="text" placeholder="Frente (pergunta)" />
+        <input id="novo-verso" type="text" placeholder="Verso (resposta)" />
+        <button id="btn-criar-cartao" class="botao">Adicionar cartão</button>
+      </div>
+
+      <div id="lista-cartoes"></div>
+    </main>
+
+    <script type="module" src="js/cartoes.js"></script>
+  </body>
+</html>

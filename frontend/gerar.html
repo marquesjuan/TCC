@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gerar cartões - Recall</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="voltar">← Voltar</a>
+      <h1>Gerar cartões com IA</h1>
+    </header>
+
+    <main>
+      <!-- Passo 1: escolher o caderno -->
+      <section id="secao-cadernos">
+        <p class="subtitulo">1. Escolha um caderno do Notion</p>
+        <div id="lista-cadernos"></div>
+      </section>
+
+      <!-- Passo 2: curadoria (preenchido após gerar) -->
+      <section id="secao-curadoria"></section>
+    </main>
+
+    <script type="module" src="js/gerar.js"></script>
+  </body>
+</html>

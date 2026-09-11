@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recall</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Recall</h1>
+      <p class="subtitulo">Meus baralhos</p>
+    </header>
+
+    <main>
+        <div class="form-inline">
+          <input id="novo-baralho-nome" type="text" placeholder="Nome do novo baralho" />
+          <button id="btn-criar-baralho" class="botao">Criar baralho</button>
+        </div>
+
+      <div style="margin-bottom: 20px;">
+        <a href="gerar.html" class="botao">✨ Gerar cartões com IA</a>
+      </div>
+
+      <div id="lista-baralhos"></div>
+    </main>
+
+    <!-- type="module" permite usar import no JS -->
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

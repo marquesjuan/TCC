@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id                Int       @id @default(autoincrement())
+  nome              String
+  email             String    @unique
+  senhaHash         String
+  streakAtual       Int       @default(0)
+  dataUltimaRevisao DateTime?
+  baralhos          Baralho[]
+}
+
+model Baralho {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  criadoEm  DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+  cartoes   Cartao[]
+}
+
+model Cartao {
+  id              Int       @id @default(autoincrement())
+  frente          String
+  verso           String
+  fatorFacilidade Float     @default(2.5)
+  intervalo       Int       @default(0)
+  repeticoes      Int       @default(0)
+  proximaRevisao  DateTime  @default(now())
+  origem          String    @default("manual")
+  baralho         Baralho   @relation(fields: [baralhoId], references: [id])
+  baralhoId       Int
+  revisoes        Revisao[]
+}
+
+model Revisao {
+  id            Int      @id @default(autoincrement())
+  qualidade     Int
+  fatorApos     Float
+  intervaloApos Int
+  data          DateTime @default(now())
+  cartao        Cartao   @relation(fields: [cartaoId], references: [id])
+  cartaoId      Int
+}
