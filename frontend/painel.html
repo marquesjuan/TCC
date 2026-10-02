@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Painel</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="voltar">← Voltar</a>
+      <h1>Painel de retenção</h1>
+    </header>
+
+    <main>
+      <!-- Números gerais -->
+      <div id="cards-gerais" class="cards-gerais"></div>
+
+      <!-- Gráficos -->
+      <div class="grafico-bloco">
+        <h2>Previsão de revisões (próximos 7 dias)</h2>
+        <canvas id="grafico-carga"></canvas>
+      </div>
+
+      <div class="grafico-bloco">
+        <h2>Evolução do desempenho</h2>
+        <canvas id="grafico-evolucao"></canvas>
+      </div>
+
+      <div class="grafico-bloco">
+        <h2>Distribuição de dificuldade</h2>
+        <canvas id="grafico-dificuldade"></canvas>
+      </div>
+    </main>
+
+    <script type="module" src="js/painel.js"></script>
+  </body>
+</html>

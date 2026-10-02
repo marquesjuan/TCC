@@ -4,7 +4,7 @@
 const API = "http://localhost:3000";
 
 // Referência ao contêiner onde os baralhos vão aparecer
-const listaEl = document.getElementById("lista-baralhos");
+const listaBaralho = document.getElementById("lista-baralhos");
 
 // Busca os baralhos do usuário 1 e desenha na tela
 // Criar um novo baralho
@@ -32,7 +32,7 @@ btnCriar.addEventListener("click", async () => {
 });
 
 async function carregarBaralhos() {
-  listaEl.innerHTML = "<p>Carregando...</p>";
+  listaBaralho.innerHTML = "<p>Carregando...</p>";
 
 
   try {
@@ -40,16 +40,14 @@ async function carregarBaralhos() {
     const baralhos = await resposta.json();
 
     if (baralhos.length === 0) {
-      listaEl.innerHTML = "<p>Nenhum baralho ainda.</p>";
+      listaBaralho.innerHTML = "<p>Nenhum baralho ainda.</p>";
       return;
     }
 
-    // Monta o HTML de cada baralho
-
-    console.log('Tamanho ->', JSON.stringify(baralhos));
+    console.log('Baralhos ->', JSON.stringify(baralhos));
     const searchTerm = ''
 
-    listaEl.innerHTML = baralhos
+    listaBaralho.innerHTML = baralhos
       .map(
         (baralho) => `
           <div class="baralho">
@@ -64,7 +62,7 @@ async function carregarBaralhos() {
       .join("");
   } catch (erro) {
     console.error("Erro ao buscar baralhos:", erro);
-    listaEl.innerHTML = "<p>Erro ao carregar. O backend está rodando?</p>";
+    listaBaralho.innerHTML = "<p>Erro ao carregar. O backend está rodando?</p>";
   }
 }
 
