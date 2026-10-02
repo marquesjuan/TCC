@@ -80,7 +80,7 @@ export async function gerarCartoes(conteudo: string, quantidade = 8) {
   let resposta;
   try {
     resposta = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-3.5-flash",
       contents: `Gere até ${quantidade} flashcards com base no conteúdo abaixo.\n\nCONTEÚDO:\n"""\n${conteudo.slice(0, 20000)}\n"""`,
       config: {
         systemInstruction: PRINCIPIOS_FORMULACAO,

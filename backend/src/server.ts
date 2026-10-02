@@ -3,6 +3,7 @@ import prisma from "./prisma.js";
 import { calcularSM2 } from "./sm2.js";
 import { listarCadernos, lerConteudoCaderno, gerarCartoes } from "./geracao.js";
 import cors from "cors";
+import { time } from "node:console";
 
 const app = express();
 app.use(cors());
@@ -12,7 +13,7 @@ app.use(express.json());
 
 // Endpoint de teste, só pra confirmar que o servidor está no ar
 app.get("/", (req, res) => {
-  res.json({ status: "ok", mensagem: "Servidor Recall no ar" });
+  res.json({ status: "ok", mensagem: "Servidor no ar" });
 });
 
 app.get("/usuarios", async (req, res) => {
@@ -85,8 +86,9 @@ app.delete("/baralhos/:id", async (req, res) => {
 // CREATE — cria um cartão em um baralho
 app.post("/cartoes", async (req, res) => {
   const { frente, verso, baralhoId } = req.body;
+  const proximaRevisao  = dataFormatadaHoje();
   const cartao = await prisma.cartao.create({
-    data: { frente, verso, baralhoId },
+    data: { frente, verso, baralhoId, proximaRevisao },
   });
   res.status(201).json(cartao);
 });
@@ -173,6 +175,7 @@ app.post("/cartoes/:id/revisar", async (req, res) => {
 
   // 3. Calcula a nova data de próxima revisão (hoje + intervalo em dias)
   const proximaRevisao = new Date();
+  proximaRevisao.setHours(0,0,0,0);
   proximaRevisao.setDate(proximaRevisao.getDate() + novoEstado.intervalo);
 
   // 4. Atualiza o cartão com o novo estado
@@ -245,7 +248,119 @@ app.post("/baralhos/:baralhoId/cartoes-gerados", async (req, res) => {
   res.status(201).json({ criados: criados.count });
 });
 
+
+app.get("/usuarios/:usuarioId/painel", async (req, res) => {
+  const usuarioId = Number(req.params.usuarioId);
+
+  try{
+
+    const todosCartoes = await prisma.cartao.findMany({
+      where: {baralho: {usuarioId}},
+      select: {proximaRevisao: true}
+    });
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const previsaoCarga = [];
+    for (let i = 0; i < 7; i++) {
+      const dia = new Date(hoje);
+      dia.setDate(hoje.getDate() + i);
+
+      const proximoDia = new Date(dia);
+      proximoDia.setDate(dia.getDate() + 1);
+
+      // Conta os cartões cuja proximaRevisao cai nesse dia
+      const quantidade = todosCartoes.filter((c) => {
+        const revisao = new Date(c.proximaRevisao);
+        return revisao >= dia && revisao < proximoDia;
+      }).length;
+
+      previsaoCarga.push({
+        data: dia.toISOString().split("T")[0], // formato AAAA-MM-DD
+        quantidade,
+      });
+    }
+
+    const totalBaralhos = await prisma.baralho.count({
+      where: {usuarioId}
+    });
+
+    const totalRevisoes = await prisma.revisao.count({
+      where: { cartao: {
+        baralho: {
+          usuarioId
+        }
+      }}
+    });
+
+    const totalCartoes = await prisma.cartao.count({
+      where: {
+        baralho: {
+          usuarioId
+        }
+      }
+    })
+
+        // Evolução do desempenho: as notas (qualidade) ao longo do tempo
+    const revisoes = await prisma.revisao.findMany({
+      where: { cartao: { baralho: { usuarioId } } },
+      select: { qualidade: true, data: true },
+      orderBy: { data: "asc" },
+    });
+
+    const evolucaoDesempenho = revisoes.map((r) => ({
+      data: r.data,
+      qualidade: r.qualidade,
+    }));
+
+    // Distribuição de dificuldade: quantos cartões em cada faixa de fator de facilidade
+    const cartoesFator = await prisma.cartao.findMany({
+      where: { baralho: { usuarioId } },
+      select: { fatorFacilidade: true },
+    });
+
+    const distribuicaoDificuldade = {
+      dificil: cartoesFator.filter((c) => c.fatorFacilidade < 2.0).length,
+      medio: cartoesFator.filter(
+        (c) => c.fatorFacilidade >= 2.0 && c.fatorFacilidade < 2.5
+      ).length,
+      facil: cartoesFator.filter((c) => c.fatorFacilidade >= 2.5).length,
+    };
+
+    res.json({
+      geral: {
+        totalBaralhos,
+        totalCartoes,
+        totalRevisoes
+      },
+      previsaoCarga,
+      evolucaoDesempenho,
+      distribuicaoDificuldade
+    })
+  } catch (erro){
+    console.log("Erro no painel: ", erro);
+    res.status(500).json({erro: "Erro ao montar o painel"});
+  }
+})
+
+
+
+
+//Formtar date
+const dataFormatadaHoje = (timeZone = "America/Sao_Paulo") => {
+  const ymd = new Intl.DateTimeFormat('en-CA', {
+    timeZone: timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
+
+  return new Date(`${ymd}T00:00:00.000Z`);
+}
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+

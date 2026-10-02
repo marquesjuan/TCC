@@ -18,7 +18,7 @@ model Usuario {
   email             String    @unique
   senhaHash         String
   streakAtual       Int       @default(0)
-  dataUltimaRevisao DateTime?
+  dataUltimaRevisao DateTime? @db.Date
   baralhos          Baralho[]
 }
 
@@ -38,7 +38,7 @@ model Cartao {
   fatorFacilidade Float     @default(2.5)
   intervalo       Int       @default(0)
   repeticoes      Int       @default(0)
-  proximaRevisao  DateTime  @default(now())
+  proximaRevisao  DateTime  @default(now()) @db.Date
   origem          String    @default("manual")
   baralho         Baralho   @relation(fields: [baralhoId], references: [id])
   baralhoId       Int
@@ -50,7 +50,7 @@ model Revisao {
   qualidade     Int
   fatorApos     Float
   intervaloApos Int
-  data          DateTime @default(now())
+  data          DateTime @default(now()) @db.Date
   cartao        Cartao   @relation(fields: [cartaoId], references: [id])
   cartaoId      Int
 }
