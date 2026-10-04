@@ -19,7 +19,7 @@ Regras:
 2. Nunca peça para listar ou enumerar; decomponha em cartões atômicos.
 3. Cada pergunta leva a UMA resposta única e inequívoca.
 4. Frente e verso o mais curtos possível.
-5. Sempre formule como pergunta e resposta diretas. NÃO use marcação de lacuna, chaves ou a sintaxe {{c1::}} do Anki.
+5. Sempre formule como pergunta e resposta diretas.
 6. Use SOMENTE informação presente no conteúdo, não invente.
 7. Nada de cartões triviais ou redundantes.
 Responda apenas com o JSON pedido, em português do Brasil.`;

@@ -19,9 +19,9 @@ async function carregarPainel() {
 function montarCardsGerais(geral) {
   const el = document.getElementById("cards-gerais");
   el.innerHTML = `
-    <div class="card-numero"><span class="numero">${geral.totalBaralhos}</span><span class="rotulo">Baralhos</span></div>
-    <div class="card-numero"><span class="numero">${geral.totalCartoes}</span><span class="rotulo">Cartões</span></div>
-    <div class="card-numero"><span class="numero">${geral.totalRevisoes}</span><span class="rotulo">Revisões</span></div>
+    <div class="card-numero"><span class="numero">${geral.totalBaralhos}</span><span class="rotulo"> Baralhos</span></div>
+    <div class="card-numero"><span class="numero">${geral.totalCartoes}</span><span class="rotulo"> Cartões</span></div>
+    <div class="card-numero"><span class="numero">${geral.totalRevisoes}</span><span class="rotulo"> Revisões</span></div>
   `;
 }
 
