@@ -53,9 +53,10 @@ async function carregarBaralhos() {
           <div class="baralho">
             <strong>${baralho.nome}</strong>
             <div class="acoes">
+              <a class="botao secundario" data-baralho=${baralho.id} onclick="excluirBaralho(this)">Excluir</a>
               <a class="botao secundario" href="cartoes.html?baralho=${baralho.id}">Cartões</a>
               <a class="botao" href="revisao.html?baralho=${baralho.id}">Revisar</a>
-            </div>
+              </div>
           </div>
         `
       )
@@ -72,9 +73,22 @@ function testando(elemento){
     console.log('peguei o id ->', JSON.stringify(searchTerm));
     window.location.href = `revisao.html?baralho=${encodeURIComponent(searchTerm)}`;
 }
+
+
+async function excluirBaralho(e){
+  const baralhoId =  e.dataset.baralho;
+  const response = await fetch(API + '/baralhos/' + baralhoId, {
+    method: "DELETE"
+  });
+
+  console.log('delete de baralho ->', response);
+  carregarBaralhos();
+}
+
 // Como app.js é carregado como <script type="module">, suas funções não
 // ficam no escopo global — precisam ser expostas em window para que
 // o onclick="" inline (que roda no escopo global) consiga encontrá-las.
+window.excluirBaralho = excluirBaralho;
 window.testando = testando;
 // Dispara ao carregar a página
 carregarBaralhos();

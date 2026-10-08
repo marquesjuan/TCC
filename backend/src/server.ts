@@ -75,6 +75,13 @@ app.put("/baralhos/:id", async (req, res) => {
 // DELETE — remove um baralho
 app.delete("/baralhos/:id", async (req, res) => {
   const id = Number(req.params.id);
+
+  await prisma.revisao.deleteMany({
+    where: {cartao: { baralhoId: id}}
+  })
+  await prisma.cartao.deleteMany({
+    where: { baralhoId: id }
+  });
   await prisma.baralho.delete({
     where: { id },
   });
