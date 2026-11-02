@@ -11,23 +11,6 @@ app.use(cors());
 // Permite que o servidor entenda corpos de requisição em JSON
 app.use(express.json());
 
-// Endpoint de teste, só pra confirmar que o servidor está no ar
-app.get("/", (req, res) => {
-  res.json({ status: "ok", mensagem: "Servidor no ar" });
-});
-
-app.get("/usuarios", async (req, res) => {
-  const usuarios = await prisma.usuario.findMany();
-  res.json(usuarios);
-});
-
-app.post("/usuarios", async (req, res) => {
-  const { nome, email, senhaHash } = req.body;
-  const usuario = await prisma.usuario.create({
-    data: { nome, email, senhaHash },
-  });
-  res.status(201).json(usuario);
-});
 
 // ===== BARALHOS =====
 
@@ -350,9 +333,6 @@ app.get("/usuarios/:usuarioId/painel", async (req, res) => {
     res.status(500).json({erro: "Erro ao montar o painel"});
   }
 })
-
-
-
 
 //Formtar date
 const dataFormatadaHoje = (timeZone = "America/Sao_Paulo") => {

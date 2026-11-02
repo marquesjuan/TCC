@@ -8,15 +8,11 @@ const notion = new Client({
 });
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// DEBUG temporário — remover depois de diagnosticar
-console.log("[DEBUG geracao.ts] GEMINI_API_KEY presente?", !!process.env.GEMINI_API_KEY, "| início:", process.env.GEMINI_API_KEY?.slice(0, 6));
-console.log("[DEBUG geracao.ts] NOTION_TOKEN presente?", !!process.env.NOTION_TOKEN, "| início:", process.env.NOTION_TOKEN?.slice(0, 6));
-
 // Princípios de formulação de cartões (Woźniak) — instrução de sistema
 const PRINCIPIOS_FORMULACAO = `Você é um especialista em formular flashcards para repetição espaçada, seguindo os princípios de Piotr Woźniak.
 Regras:
 1. Princípio da informação mínima: cada cartão cobre UM único fato simples.
-2. Nunca peça para listar ou enumerar; decomponha em cartões atômicos.
+2. Não crie enumerações ou listas; decomponha em cartões atômicos.
 3. Cada pergunta leva a UMA resposta única e inequívoca.
 4. Frente e verso o mais curtos possível.
 5. Sempre formule como pergunta e resposta diretas.
